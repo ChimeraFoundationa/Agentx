@@ -1,0 +1,60 @@
+# AgentX Fuji Testnet Configuration
+
+# Network Settings
+network: fuji
+chain_id: 43113
+rpc_url: https://api.avax-test.network/ext/bc/C/rpc
+explorer: https://testnet.snowtrace.io
+
+# ERC-8004 Contract Addresses (Fuji Deployment)
+erc8004:
+  enabled: true
+  network: fuji
+  
+  contracts:
+    identity_registry: "0xB322E670e9fC1db7750F162B09c5c9115304B2bC"
+    reputation_registry: "0x2521395D6B633EDE25A87AFcA3c0c94457085399"
+    validation_registry: "0xd06323Db8C442efa8750536ad7BBb5273ff9C88a"
+  
+  agent:
+    name: "AgentX-Fuji"
+    auto_register: true
+    capabilities:
+      - defi_tracking
+      - nft_analysis
+      - whale_alert
+  
+  storage:
+    type: "http"  # Use HTTP for testing
+
+# x402 Payment Settings
+x402:
+  enabled: true
+  network: fuji
+  facilitator: "https://facilitator-testnet.payai.network"
+  
+  accepted_assets:
+    - USDC
+    - AVAX
+  
+  pricing:
+    api_call: "$0.001"
+    tool_execution: "$0.005"
+    complex_task: "$0.05"
+
+# Your Wallet
+wallet:
+  address: "0xDc9D44889eD7A98a9a2B976146B2395df25f334d"
+  # Private key should be in environment variable, not here!
+  # export AGENTX_PRIVATE_KEY="0x..."
+
+# AI Provider Settings
+llm:
+  provider: openrouter  # Recommended for Fuji testing
+  model: openrouter/nousresearch/hermes-3-llama-3-70b
+  # export OPENROUTER_API_KEY="sk-or-..."
+
+# Logging
+logging:
+  level: INFO
+  file: /tmp/agentx_fuji.log

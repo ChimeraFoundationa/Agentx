@@ -1,0 +1,141 @@
+# AgentX Web3 Configuration
+# https://docs.agentx.dev
+
+# ERC-8004 Identity Configuration
+erc8004:
+  enabled: true
+  network: "base"  # Options: ethereum, base, base_sepolia, sepolia, arbitrum
+  
+  # Registry contract addresses (update after deployment)
+  contracts:
+    identity_registry: "0x..."  # ERC-8004 Identity Registry
+    reputation_registry: "0x..."  # Reputation Registry
+    validation_registry: "0x..."  # Validation Registry
+  
+  # Agent identity
+  agent:
+    name: "AgentX"
+    auto_register: true  # Auto-register on first run
+    auto_attest: true    # Auto-submit attestations after tasks
+    capabilities:
+      - defi_tracking
+      - nft_analysis
+      - wallet_monitoring
+      - swap_execution
+  
+  # Storage for Agent Card and evidence
+  storage:
+    type: "ipfs"  # Options: ipfs, arweave, http
+    ipfs_gateway: "https://ipfs.io/ipfs/"
+
+# x402 Payment Configuration
+x402:
+  enabled: true
+  
+  # Facilitator for payment settlement
+  facilitator: "https://facilitator.payai.network"
+  
+  # Accepted networks (CAIP-2 format)
+  accepted_networks:
+    - "eip155:8453"    # Base mainnet
+    - "eip155:84532"   # Base Sepolia
+    - "eip155:1"       # Ethereum mainnet
+    - "eip155:11155111"  # Ethereum Sepolia
+  
+  # Accepted assets
+  accepted_assets:
+    - symbol: "USDC"
+      decimals: 6
+    - symbol: "ETH"
+      decimals: 18
+    - symbol: "DAI"
+      decimals: 18
+  
+  # Default pricing for services
+  pricing:
+    api_call: "$0.001"
+    tool_execution: "$0.005"
+    complex_task: "$0.05"
+    wallet_analysis: "$0.01"
+    defi_report: "$0.02"
+    swap_execution: "$0.10"
+  
+  # Wallet configuration
+  wallet:
+    type: "local"  # Options: local, ledger, remote
+    address: "0xYourWalletAddress"
+    spending_limit: "$10/day"  # Auto-payment limit for outgoing payments
+    allowlist: []  # Allowed recipients for auto-payments
+
+# Blockchain RPC Configuration
+blockchain:
+  # RPC providers (supports multiple for fallback)
+  rpc_providers:
+    ethereum:
+      - "https://eth-mainnet.g.alchemy.com/v2/${ALCHEMY_KEY}"
+      - "https://mainnet.infura.io/v3/${INFURA_KEY}"
+    
+    base:
+      - "https://base-mainnet.g.alchemy.com/v2/${ALCHEMY_KEY}"
+      - "https://mainnet.base.org"
+    
+    arbitrum:
+      - "https://arb-mainnet.g.alchemy.com/v2/${ALCHEMY_KEY}"
+      - "https://arb1.arbitrum.io/rpc"
+    
+    base_sepolia:
+      - "https://base-sepolia.g.alchemy.com/v2/${ALCHEMY_KEY}"
+    
+    sepolia:
+      - "https://eth-sepolia.g.alchemy.com/v2/${ALCHEMY_KEY}"
+
+# GoldRush MCP Configuration
+goldrush_mcp:
+  enabled: true
+  api_key: "${GOLDRUSH_API_KEY}"
+  
+  # Available tools
+  tools:
+    - multichain_balances
+    - multichain_transactions
+    - token_balances
+    - nft_for_address
+    - historical_token_prices
+    - gas_prices
+    - token_approvals
+
+# Web3 Skills Configuration
+web3_skills:
+  enabled:
+    - defi_tracker
+    - nft_monitor
+    - whale_alert
+    - airdrop_hunter
+    - security_auditor
+  
+  # Skill-specific settings
+  defi_tracker:
+    update_interval: 300  # seconds
+    protocols:
+      - uniswap
+      - aave
+      - compound
+      - curve
+  
+  nft_monitor:
+    update_interval: 600
+    collections: []  # Watch specific collections
+  
+  whale_alert:
+    threshold_usd: 100000  # Alert on transactions > $100k
+    watch_addresses: []  # Specific addresses to monitor
+  
+  security_auditor:
+    auto_check_approvals: true
+    approval_threshold_days: 30  # Warn if approval older than 30 days
+
+# Logging & Monitoring
+monitoring:
+  log_onchain_transactions: true
+  log_payments: true
+  metrics_endpoint: "/metrics"  # Prometheus metrics
