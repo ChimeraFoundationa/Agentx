@@ -7,7 +7,7 @@ name = "agentx"
 version = "0.1.0"
 description = "AgentX - The Web3 AI Agent Protocol with ERC-8004 Identity & x402 Payments"
 readme = "README.md"
-requires-python = ">=3.11"
+requires-python = ">=3.10"  # Support Python 3.10+ for wider compatibility
 authors = [{ name = "AgentX Team", email = "hello@agentx.dev" }]
 license = { text = "MIT" }
 dependencies = [
