@@ -81,6 +81,22 @@ echo "║                                                           ║"
 echo "╚═══════════════════════════════════════════════════════════╝"
 echo ""
 
+# Install system dependencies (requires sudo)
+log_info "Installing system dependencies..."
+if command -v apt-get &> /dev/null; then
+    sudo apt-get update -qq
+    sudo apt-get install -y -qq python3-venv python3-pip git curl
+    log_success "System dependencies installed"
+elif command -v yum &> /dev/null; then
+    sudo yum install -y -q python3-virtualenv python3-pip git curl
+    log_success "System dependencies installed"
+elif command -v brew &> /dev/null; then
+    brew install python git curl --quiet
+    log_success "System dependencies installed"
+else
+    log_warning "Cannot auto-install dependencies. Please install manually."
+fi
+
 # Check if running on Windows
 if [[ "$OSTYPE" == "msys" || "$OSTYPE" == "win32" ]]; then
     log_error "Native Windows is not supported. Please install WSL2 and run this script there."
