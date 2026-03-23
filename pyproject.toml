@@ -42,12 +42,8 @@ dependencies = [
   # Web3 Dependencies (NEW for AgentX)
   "web3>=6.0.0",
   "eth-account>=0.10.0",
-  "x402-core>=0.2.0",
-  "x402-evm>=0.2.0",
   # MCP
-  "mcp-sdk>=1.0.0",
   # GoldRush
-  "goldrush-mcp>=0.1.0",
 ]
 
 [project.optional-dependencies]
@@ -81,9 +77,6 @@ yc-bench = ["yc-bench @ git+https://github.com/collinear-ai/yc-bench.git"]
 web3 = [
   "web3>=6.0.0",
   "eth-account>=0.10.0",
-  "x402-core>=0.2.0",
-  "x402-evm>=0.2.0",
-  "goldrush-mcp>=0.1.0",
 ]
 all = [
   "agentx[modal]",
