@@ -21,7 +21,7 @@ NC='\033[0m'
 AGENTX_DIR="${AGENTX_INSTALL_DIR:-$HOME/.agentx}"
 REPO_URL="${AGENTX_REPO_URL:-https://github.com/ChimeraFoundationa/Agentx.git}"
 BRANCH="${AGENTX_BRANCH:-main}"
-PYTHON_VERSION="3.11"
+PYTHON_VERSION="3.10"  # Use system Python version
 NETWORK="fuji"  # Default network
 
 # Parse arguments
