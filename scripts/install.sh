@@ -206,8 +206,8 @@ case $NETWORK in
         ;;
 esac
 
-# Step 9: Add to PATH
-log_info "Adding AgentX to PATH..."
+# Step 9: Add to PATH and configure
+log_info "Configuring AgentX..."
 
 # Detect shell
 SHELL_NAME=$(basename "$SHELL")
@@ -221,30 +221,46 @@ else
     PROFILE="$HOME/.profile"
 fi
 
-# Add export to profile
-EXPORT_LINE="export PATH=\"$AGENTX_DIR/venv/bin:\$PATH\""
-if ! grep -q "AGENTX_DIR" "$PROFILE" 2>/dev/null; then
-    echo "" >> "$PROFILE"
-    echo "# AgentX" >> "$PROFILE"
-    echo "export AGENTX_DIR=\"$AGENTX_DIR\"" >> "$PROFILE"
-    echo "$EXPORT_LINE" >> "$PROFILE"
-    log_success "Added AgentX to PATH in $PROFILE"
-else
-    log_info "AgentX already in PATH"
-fi
+# Add exports to profile
+cat >> "$PROFILE" << EOF
 
-# Source the profile
+# AgentX Configuration
+export AGENTX_DIR="$AGENTX_DIR"
+export PYTHONPATH="\$AGENTX_DIR:\$PYTHONPATH"
+export PATH="\$AGENTX_DIR/venv/bin:\$PATH"
+
+# AgentX Alias
+alias agentx="python3 -m hermes_cli.agentx_cli"
+EOF
+
+log_success "AgentX configured in $PROFILE"
+
+# Source the profile for current session
 if [[ "$SHELL_NAME" == "bash" || "$SHELL_NAME" == "zsh" ]]; then
     source "$PROFILE"
 fi
 
 # Step 10: Verify installation
 log_info "Verifying installation..."
-if command -v agentx &> /dev/null; then
+
+# Create test script
+cat > "$AGENTX_DIR/agentx" << 'TESTSCRIPT'
+#!/bin/bash
+# AgentX Wrapper Script
+AGENTX_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+source "$AGENTX_DIR/venv/bin/activate"
+export PYTHONPATH="$AGENTX_DIR:$PYTHONPATH"
+python3 -m hermes_cli.agentx_cli "$@"
+TESTSCRIPT
+
+chmod +x "$AGENTX_DIR/agentx"
+
+# Test if agentx command works
+if "$AGENTX_DIR/agentx" --help &> /dev/null; then
     log_success "AgentX installed successfully!"
 else
-    # Try direct path
-    if [ -x "$AGENTX_DIR/venv/bin/agentx" ]; then
+    # Try alternative method
+    if cd "$AGENTX_DIR" && source venv/bin/activate && PYTHONPATH="$AGENTX_DIR" python3 -m hermes_cli.agentx_cli --help &> /dev/null; then
         log_success "AgentX installed successfully!"
     else
         log_error "Installation verification failed. Please check the logs above."
