@@ -163,6 +163,13 @@ log_success "Virtual environment created"
 
 # Step 6: Install dependencies
 log_info "Installing dependencies (this may take a few minutes)..."
+
+# Clear UV cache to prevent permission issues
+if command -v uv &> /dev/null; then
+    log_info "Clearing UV cache..."
+    rm -rf "$HOME/.cache/uv" 2>/dev/null || true
+fi
+
 source venv/bin/activate
 uv pip install -e ".[all,web3]"
 log_success "Dependencies installed"
