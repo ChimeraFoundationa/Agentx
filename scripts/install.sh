@@ -168,10 +168,19 @@ log_info "Installing dependencies (this may take a few minutes)..."
 if command -v uv &> /dev/null; then
     log_info "Clearing UV cache..."
     rm -rf "$HOME/.cache/uv" 2>/dev/null || true
+    # Use pip instead of uv to avoid hardlink permission issues
+    log_info "Using pip for installation..."
+    source venv/bin/activate
+    pip install --upgrade pip setuptools wheel
+    pip install --no-cache-dir -e ".[web3]"
+else
+    # Fallback to pip if uv not available
+    log_info "Using pip for installation..."
+    source venv/bin/activate
+    pip install --upgrade pip setuptools wheel
+    pip install --no-cache-dir -e ".[web3]"
 fi
 
-source venv/bin/activate
-uv pip install -e ".[all,web3]"
 log_success "Dependencies installed"
 
 # Step 7: Install Node.js dependencies (for GoldRush MCP)
